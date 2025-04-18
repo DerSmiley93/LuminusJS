@@ -12,9 +12,11 @@ import { Sprite } from "./engine/external/sprite.js";
 import { CameraController } from "./components/cameraControler.js";
 import Vector2 from "./engine/math/vector2.js";
 import Scale from "./engine/math/scale.js";
+import { SpriteAtlas } from "./engine/external/sprite-atlas.js";
 
 const assets = new AssetManager([
-    new Sprite('/assets/sprites/testSprite.png', 'testSprite')
+    new Sprite('/assets/sprites/testSprite.png', 'testSprite'),
+    new SpriteAtlas('atlasTes','/assets/sprites/testSprite.png',3,3)
 ]);
 
 const mainCamera = new GameObject('MainCamera', [
@@ -23,7 +25,7 @@ const mainCamera = new GameObject('MainCamera', [
 ],new Transform());
 
 const testObject = new GameObject('TestObject', [
-    new SpriteRenderer('testSprite'),
+    new SpriteRenderer(''),
     new ShapeRenderer2D(new Rect2D(32,32,'green',"blue",false,true,1)),
     new Spinn()
 ],new Transform(),1);
