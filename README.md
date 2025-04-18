@@ -80,7 +80,7 @@ LuminusJS uses a component-based architecture. Some built-in components include:
 
 - `Camera`: Handles view rendering
 - `ShapeRenderer2D`: Renders basic 2D shapes
-- `SpriteRenderer`: Renders sprites and animated sprites
+- `SpriteRenderer`: Renders sprites
 - `Transform`: Handles position, rotation, and scale
 
 ## Asset Management
