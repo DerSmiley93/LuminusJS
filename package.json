@@ -1,0 +1,22 @@
+{
+  "name": "luminusjs",
+  "version": "1.0.0",
+  "description": "a js/ts game engine",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DerSmiley93/LuminusJS.git"
+  },
+  "author": "DerSmiley93",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DerSmiley93/LuminusJS/issues"
+  },
+  "homepage": "https://github.com/DerSmiley93/LuminusJS#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
