@@ -21,17 +21,35 @@ A lightweight, TypeScript-based 2D game engine that runs in the browser.
 git clone https://github.com/yourusername/LuminusJS.git
 ```
 
-2. Install TypeScript if you haven't already:
+2. Install the required packages:
 ```bash
-npm install -g typescript
+npm install
+```
+```bash
+npm install
 ```
 
 3. Run the TypeScript compiler in watch mode:
 ```bash
-./watch.bat
+npm run watch
 ```
 
-4. Open `index.html` in a web browser
+4. Serve `index.html` using a lightweight development server. For example, you can use `lite-server`:
+
+    Install `lite-server` globally:
+    ```bash
+    npm install -g lite-server
+    ```
+
+    Run the server:
+    ```bash
+    lite-server
+    ```
+
+    Alternatively, you can use `http-server`:
+    ```bash
+    npx http-server
+    ```
 
 ## Creating a Basic Scene
 
