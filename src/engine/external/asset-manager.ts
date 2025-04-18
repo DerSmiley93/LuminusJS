@@ -22,7 +22,6 @@ export class AssetManager{
 
 
     public async loadAssets(): Promise<void>{
-
         const promises: Promise<void>[] = [];
         for( const asset of this.assets.values()){
             promises.push(asset.laod());
@@ -41,6 +40,7 @@ export class AssetManager{
         await Promise.all(promises);
 
         this.isLoaded = true;
+        
     }
 
 
