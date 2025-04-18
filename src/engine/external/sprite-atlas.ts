@@ -11,15 +11,13 @@ export class SpriteAtlas implements Asset {
     private rows: number;
     private srcImage?: HTMLImageElement;
 
-    sprites: Sprite[];
+    sprites: Sprite[] = [];
 
-    constructor(name: string, path: string, columns: number, rows: number) {
+    constructor(path: string, name: string, columns: number, rows: number) {
         this.name = name;
         this.path = path;
         this.columns = columns;
         this.rows = rows;
-
-        this.sprites = new Array(columns * rows);
     }
 
     async laod(): Promise<void> {
@@ -36,15 +34,16 @@ export class SpriteAtlas implements Asset {
         this.srcImage.src = url;
 
         return new Promise((reslove) => {
-            this.srcImage!.onload = () => {
-                this.createSprites()
+            this.srcImage!.onload = async() => {
+                await this.createSprites()
+
                 reslove();
             }
         })
     }
 
 
-    private createSprites(): void {
+    private async createSprites(): Promise<void> {
         const imageCanvas = document.createElement("canvas");
         const ctx = imageCanvas.getContext("2d") as CanvasRenderingContext2D
 
@@ -59,12 +58,12 @@ export class SpriteAtlas implements Asset {
             Math.floor(imageCanvas.height / this.rows)
         );
 
-        const tilesImageData: Uint8Array[] = new Array(this.columns * this.rows);
+        const tilesImageData: Uint8ClampedArray[] = new Array(this.columns * this.rows);
 
 
         //creating buffer for new sprites
         for (let i = 0; i < tilesImageData.length; i++) {
-            tilesImageData[i] = new Uint8Array(tileSize.x * tileSize.y * 4);
+            tilesImageData[i] = new Uint8ClampedArray(tileSize.x * tileSize.y * 4);
         }
 
         //looping over image to create tiles
@@ -88,7 +87,7 @@ export class SpriteAtlas implements Asset {
 
             const tilePixelCords = new Vector2(pixelCords.x % tileSize.x, pixelCords.y % tileSize.y);
 
-            const tilePixelIndex = (tileCords.x * tileSize.x) + tilePixelCords.y;
+            const tilePixelIndex = (tilePixelCords.y * tileSize.x + tilePixelCords.x) * 4;
 
             tilesImageData[tileIndex][tilePixelIndex] = R;
             tilesImageData[tileIndex][tilePixelIndex + 1] = G;
@@ -97,5 +96,32 @@ export class SpriteAtlas implements Asset {
 
             pixelIndex++;
         }
+        for(let i = 0; i < tilesImageData.length; i++){
+            const tileData = new ImageData(tilesImageData[i],tileSize.x,tileSize.y);
+            const tile = await this.createImageFromImageData(tileData);
+            const sprite = new Sprite('',this.name + i.toString())
+            sprite.image = tile;
+            this.sprites.push(sprite);
+        }
+        
+    }
+
+    private async createImageFromImageData(imageData:ImageData):Promise<HTMLImageElement>{
+        const canvas = document.createElement('canvas');
+
+        canvas.height = imageData.height;
+        canvas.width = imageData.width;
+
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.putImageData(imageData,0,0);
+
+        const image = new Image(imageData.width, imageData.height);
+        image.src = canvas.toDataURL("image/png");
+
+        return new Promise((resolve) => {
+            image.onload = () => {
+                resolve(image)
+            }
+        })
     }
 }

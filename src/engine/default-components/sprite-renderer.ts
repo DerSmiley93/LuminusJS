@@ -20,10 +20,9 @@ export class SpriteRenderer implements Component {
 
     start(): void {
         if(this.spriteName != ''){
-            const spriteAsset = game.scene?.assetManager.getAsset<Sprite>(this.spriteName);
-
+            const spriteAsset = game.scene?.assetManager.getAsset(this.spriteName);
             if(spriteAsset instanceof SpriteAtlas){
-                this.sprite! = spriteAsset.sprites[0];
+                this.sprite = spriteAsset.sprites[0];
             }else{
                 this.sprite = spriteAsset;
             }
@@ -36,6 +35,7 @@ export class SpriteRenderer implements Component {
     update(): void {
         if (this.spriteName != '') {
             if (!this.sprite) throw new Error("Sprite not correctly initialized");
+            
             if (!this.sprite.image) throw new Error("Sprite not correctly initialized");
             if (!this.camera) throw new Error("Camera not found");
 

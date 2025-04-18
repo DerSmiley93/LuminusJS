@@ -45,6 +45,7 @@ export default class Scene {
     }
 
     async load(): Promise<void>{
+        console.log("loading Scene!")
         await this.assetManager.loadAssets();
 
         this._sortZIndex();
@@ -54,10 +55,11 @@ export default class Scene {
         }
         
         this.isLoaded = true;
+        console.log("scene loading done!")
     }
 
     async loadAsync(): Promise<void>{
-        
+        console.log("loading scene")
         await this.assetManager.loadAssets();
         for(const gameObject of this.gameObjects) {
             gameObject.start();
@@ -65,6 +67,7 @@ export default class Scene {
         this._sortZIndex();
         this._updateKinematics();
         this.isLoaded = true;
+        console.log("scene loading done!")
     }
 
     update():void{

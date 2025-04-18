@@ -16,16 +16,16 @@ import { SpriteAtlas } from "./engine/external/sprite-atlas.js";
 
 const assets = new AssetManager([
     new Sprite('/assets/sprites/testSprite.png', 'testSprite'),
-    new SpriteAtlas('atlasTes','/assets/sprites/testSprite.png',3,3)
+    new SpriteAtlas('/assets/sprites/testSprite.png','atlasTest',3,3)
 ]);
 
 const mainCamera = new GameObject('MainCamera', [
-    new Camera(1),
+    new Camera(2),
     new CameraController()
 ],new Transform());
 
 const testObject = new GameObject('TestObject', [
-    new SpriteRenderer(''),
+    new SpriteRenderer('testSprite'),
     new ShapeRenderer2D(new Rect2D(32,32,'green',"blue",false,true,1)),
     new Spinn()
 ],new Transform(),1);
