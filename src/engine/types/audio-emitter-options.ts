@@ -11,4 +11,5 @@ export interface AudioEmitterOptions  {
     orientationX?:number;
     orientationY?:number;
     orientationZ?:number;
+    loop?:boolean;
 }

@@ -79,9 +79,13 @@ export default class Scene {
         // sets position of audio listener to active camera
         if(!this.activeCamera) throw new Error("no active camera");
         const audioListener = game.audioContext.listener;
-        audioListener.forwardX.value = this.activeCamera.transform.worldPosition.x;
-        audioListener.forwardY.value = this.activeCamera.transform.worldPosition.y;
-        audioListener.forwardZ.value = 300;
+        audioListener.positionX.value = this.activeCamera.transform.worldPosition.x;
+        audioListener.positionY.value = this.activeCamera.transform.worldPosition.y;
+        audioListener.positionZ.value = 300;
+
+        audioListener.forwardX.value = 0;
+        audioListener.forwardY.value = 0;
+        audioListener.forwardZ.value = 1;
 
         audioListener.upX.value = this.activeCamera.transform.up.x;
         audioListener.upY.value = this.activeCamera.transform.up.y;

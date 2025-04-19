@@ -14,6 +14,8 @@ class Game {
     public enableProfiler: boolean = false;
     public profiler?: Profiler;
     public audioContext = new AudioContext();
+    public volume:number = 0.5
+
 
     get ctx(): CanvasRenderingContext2D {
         return this._ctx;

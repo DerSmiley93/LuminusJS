@@ -10,10 +10,12 @@ import { CameraController } from "./components/cameraControler.js";
 import Scale from "./engine/math/scale.js";
 import { SpriteAtlas } from "./engine/external/sprite-atlas.js";
 import { AudioEmitter } from "./engine/default-components/audio-emitter.js";
+import { AudioAsset } from "./engine/external/audio-asset.js";
 
 const assets = new AssetManager([
     new Sprite('/assets/sprites/testSprite.png', 'testSprite'),
-    new SpriteAtlas('/assets/sprites/testSprite.png','atlasTest',3,3)
+    new SpriteAtlas('/assets/sprites/testSprite.png','atlasTest',3,3),
+    new AudioAsset('/assets/audio/testAudio.wav',"testAudio")
 ]);
 
 const mainCamera = new GameObject('MainCamera', [
@@ -23,7 +25,7 @@ const mainCamera = new GameObject('MainCamera', [
 
 const testObject = new GameObject('TestObject', [
     new SpriteRenderer('testSprite'),
-    new AudioEmitter({}),
+    new AudioEmitter({loop:true},"testAudio"),
     new Spinn()
 ],new Transform(),1);
 
