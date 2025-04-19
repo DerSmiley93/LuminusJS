@@ -13,12 +13,11 @@ class Game {
 
     public enableProfiler: boolean = false;
     public profiler?: Profiler;
+    public audioContext = new AudioContext();
 
     get ctx(): CanvasRenderingContext2D {
         return this._ctx;
     }
-
-
 
 
     update() {
@@ -36,8 +35,6 @@ class Game {
         if(this.scene && this.scene.isLoaded){
             this.scene.update();
         }
-
- 
 
         requestAnimationFrame(this.update.bind(this));
     }

@@ -14,6 +14,7 @@ export default class Scene {
 
     gameObjects: GameObject[];
     activeCamera?: GameObject
+    
     private lasGameObjectCount: number = 0;
 
 
@@ -71,8 +72,22 @@ export default class Scene {
     }
 
     update():void{
-
+        
+        
         this._updateKinematics();
+
+        // sets position of audio listener to active camera
+        if(!this.activeCamera) throw new Error("no active camera");
+        const audioListener = game.audioContext.listener;
+        audioListener.forwardX.value = this.activeCamera.transform.worldPosition.x;
+        audioListener.forwardY.value = this.activeCamera.transform.worldPosition.y;
+        audioListener.forwardZ.value = 300;
+
+        audioListener.upX.value = this.activeCamera.transform.up.x;
+        audioListener.upY.value = this.activeCamera.transform.up.y;
+        audioListener.upZ.value = 0;
+
+
         if(this.lasGameObjectCount !== this.gameObjects.length){
             this._sortZIndex();
             this.lasGameObjectCount = this.gameObjects.length;
@@ -94,6 +109,7 @@ export default class Scene {
     private _updateKinematics(): void {
     
         for (const gameObject of this.gameObjects) {
+            
             const children = gameObject.transform.children;
 
             for (const child of children) {
@@ -107,6 +123,7 @@ export default class Scene {
                 gameObject.transform.worldRotation = gameObject.transform.rotation;
                 gameObject.transform.worldScale = gameObject.transform.scale;
             }
+            gameObject.transform.updateDirections();
         }
     }
 
