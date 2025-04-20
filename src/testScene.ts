@@ -20,12 +20,12 @@ const assets = new AssetManager([
 
 const mainCamera = new GameObject('MainCamera', [
     new Camera(1),
-    new CameraController()
+    new CameraController(),
 ],new Transform());
 
 const testObject = new GameObject('TestObject', [
     new SpriteRenderer('testSprite'),
-    new AudioEmitter({loop:true},"testAudio"),
+    new AudioEmitter({loop:true}),
     new Spinn()
 ],new Transform(),1);
 

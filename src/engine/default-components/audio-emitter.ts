@@ -8,35 +8,30 @@ export class AudioEmitter implements Component {
     public transform!: Transform;
     private panner!: PannerNode;
     private track!: AudioBufferSourceNode
-    private audioAsset?:AudioAsset;
-    
-    constructor(private options:AudioEmitterOptions,private assetName:string){
-        
+    public audioAsset?: AudioAsset;
+
+    constructor(private options: AudioEmitterOptions) {
+
     }
 
     start(): void {
-        this.panner = new PannerNode(game.audioContext,{
-            panningModel:this.options.panningModel || "HRTF",
-            distanceModel:this.options.distanceModel || "linear",
-            positionX:this.transform.worldPosition.x,
-            positionY:this.transform.worldPosition.y,
-            positionZ:this.options.positionZ || -100,
-            orientationX:this.options.orientationX || 0,
-            orientationY:this.options.orientationY || 0,
+        this.panner = new PannerNode(game.audioContext, {
+            panningModel: this.options.panningModel || "HRTF",
+            distanceModel: this.options.distanceModel || "linear",
+            positionX: this.transform.worldPosition.x,
+            positionY: this.transform.worldPosition.y,
+            positionZ: this.options.positionZ || -100,
+            orientationX: this.options.orientationX || 0,
+            orientationY: this.options.orientationY || 0,
             orientationZ: this.options.orientationZ || 1,
-            rolloffFactor:this.options.rollOff || 10,
-            coneInnerAngle:this.options.innerConeAngle || 40,
-            coneOuterAngle:this.options.outerConeAngle || 180,
-            coneOuterGain:this.options.outerGain || 0.3
+            rolloffFactor: this.options.rollOff || 10,
+            coneInnerAngle: this.options.innerConeAngle || 40,
+            coneOuterAngle: this.options.outerConeAngle || 180,
+            coneOuterGain: this.options.outerGain || 0.3
         })
-
-        this.audioAsset = game.scene!.assetManager.getAsset(this.assetName);
-        if(!this.audioAsset) throw new Error("Audio not correctly initialized");
-        if(!this.audioAsset.buffer) throw new Error("Audio not correctly initialized");
-
         
-        this.track = new AudioBufferSourceNode(game.audioContext,{buffer:this.audioAsset.audioBuffer})
-        this.track.connect(this.panner).connect(new GainNode(game.audioContext,{gain: game.volume})).connect(game.audioContext.destination);
+        this.track = new AudioBufferSourceNode(game.audioContext);
+        this.track.connect(this.panner).connect(new GainNode(game.audioContext, { gain: game.volume })).connect(game.audioContext.destination);
         this.track.loop = this.options.loop || false;
     }
 
@@ -45,11 +40,13 @@ export class AudioEmitter implements Component {
         this.panner.positionY.value = this.transform.worldPosition.y;
     }
 
-    playAudio(){
+    playAudio(audioAsset:AudioAsset) {
+        if(!audioAsset.audioBuffer) throw new Error("Audio Asset not loaded or invalid. can't play audio");
+        this.track.buffer = audioAsset.audioBuffer;
         this.track.start();
     }
 
-    stopAudio(){
+    stopAudio() {
         this.track.stop();
     }
 

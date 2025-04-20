@@ -1,5 +1,4 @@
 
-import { Profiler } from "../debug/profiler.js";
 import Scene from "./scene.js";
 
 
@@ -7,15 +6,16 @@ class Game {
     public scene?: Scene;
     private newScene?: Scene;
     private _ctx!: CanvasRenderingContext2D;
-
-    private onFrameEndListeners: (() => void)[] = [];
-    private onFrameStartListeners: (() => void)[] = [];
+    private frameStart:number = performance.now();
+    private frameEnd:number = performance.now();
+    
 
     public enableProfiler: boolean = false;
-    public profiler?: Profiler;
     public audioContext = new AudioContext();
     public volume:number = 0.5
 
+    public deltaTime:number = 0.0167;
+    public time:number = 0;
 
     get ctx(): CanvasRenderingContext2D {
         return this._ctx;
@@ -23,26 +23,30 @@ class Game {
 
 
     update() {
-    
-        this.onFrameEndListeners.forEach((callback) => callback());
-        this.onFrameStartListeners.forEach((callback) => callback());
+        //calculating Deltatime
+        this.frameEnd = performance.now();
+        this.deltaTime = (this.frameEnd - this.frameStart) / 1000;
+        this.time += this.deltaTime;
+        this.frameStart = performance.now();
 
+        //Main Gameloop
         this._ctx.clearRect(-this._ctx.canvas.width / 2, -this._ctx?.canvas.height / 2, this._ctx.canvas.width, this._ctx.canvas.height);
 
+        //enables seamless switch
         if(this.newScene?.isLoaded){
             this.scene = this.newScene;
             this.newScene = undefined;
         }
 
+        //only updates if scene is loadet and a scene exists
         if(this.scene && this.scene.isLoaded){
             this.scene.update();
         }
-
+        
         requestAnimationFrame(this.update.bind(this));
     }
 
     async loadScene(scene: Scene, async = false) {
-        if(this.enableProfiler) this.profiler = new Profiler();
 
         if(!this.ctx) this.createCanvas(500,500);
 
@@ -73,16 +77,6 @@ class Game {
         this._ctx.translate(this._ctx.canvas.width / 2, this._ctx.canvas.height / 2);
         document.body.appendChild(canvas);
     } 
-    
-    
-    onFrameStart(callback: () => void) {
-        this.onFrameStartListeners.push(callback);
-    }
-
-    onFrameEnd(callback: () => void) {
-        this.onFrameEndListeners.push(callback);
-    }
-
     
 }
 

@@ -12,7 +12,6 @@ export class AudioAsset implements Asset{
 
     async laod(): Promise<void> {
         const response = await fetch(this.path);
-
         if(!response.ok) throw new Error(`Failed to load audio: ${this.path}`);
 
         this.buffer = await response.arrayBuffer();

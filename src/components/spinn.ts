@@ -17,7 +17,7 @@ export default class Spinn implements Component {
         let audioEmitter = this.transform.gameObject.getComponent(AudioEmitter);
         if (!AudioEmitter) return;
 
-        audioEmitter?.playAudio();
+        audioEmitter?.playAudio(game.scene!.assetManager.getAsset("testAudio"));
     }
 
     update(): void {

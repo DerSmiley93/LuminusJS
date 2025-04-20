@@ -10,11 +10,11 @@ import game from "./game.js";
 export default class Scene {
 
     isLoaded: boolean = false;
-    assetManager:AssetManager;
+    assetManager: AssetManager;
 
     gameObjects: GameObject[];
     activeCamera?: GameObject
-    
+
     private lasGameObjectCount: number = 0;
 
 
@@ -32,12 +32,12 @@ export default class Scene {
         }
     }
 
-    findComponents<T extends Component>(componentType: new (...args: any[]) => T): T[]{
+    findComponents<T extends Component>(componentType: new (...args: any[]) => T): T[] {
         const components: T[] = [];
 
-        for (const gameObject of this.gameObjects){
-            for (const component of gameObject.components){
-                if(component instanceof componentType){
+        for (const gameObject of this.gameObjects) {
+            for (const component of gameObject.components) {
+                if (component instanceof componentType) {
                     components.push(component as T);
                 }
             }
@@ -45,7 +45,7 @@ export default class Scene {
         return components;
     }
 
-    async load(): Promise<void>{
+    async load(): Promise<void> {
         console.log("loading Scene!")
         await this.assetManager.loadAssets();
 
@@ -54,15 +54,15 @@ export default class Scene {
             gameObject.start();
             this._updateKinematics();
         }
-        
+
         this.isLoaded = true;
         console.log("scene loading done!")
     }
 
-    async loadAsync(): Promise<void>{
+    async loadAsync(): Promise<void> {
         console.log("loading scene")
         await this.assetManager.loadAssets();
-        for(const gameObject of this.gameObjects) {
+        for (const gameObject of this.gameObjects) {
             gameObject.start();
         }
         this._sortZIndex();
@@ -71,13 +71,13 @@ export default class Scene {
         console.log("scene loading done!")
     }
 
-    update():void{
-        
-        
+    update(): void {
+
+
         this._updateKinematics();
 
         // sets position of audio listener to active camera
-        if(!this.activeCamera) throw new Error("no active camera");
+        if (!this.activeCamera) throw new Error("no active camera");
         const audioListener = game.audioContext.listener;
         audioListener.positionX.value = this.activeCamera.transform.worldPosition.x;
         audioListener.positionY.value = this.activeCamera.transform.worldPosition.y;
@@ -92,7 +92,7 @@ export default class Scene {
         audioListener.upZ.value = 0;
 
 
-        if(this.lasGameObjectCount !== this.gameObjects.length){
+        if (this.lasGameObjectCount !== this.gameObjects.length) {
             this._sortZIndex();
             this.lasGameObjectCount = this.gameObjects.length;
         }
@@ -100,7 +100,7 @@ export default class Scene {
         for (const gameObject of this.gameObjects) {
             gameObject.update();
         }
-        
+
     }
 
 
@@ -111,18 +111,26 @@ export default class Scene {
     }
 
     private _updateKinematics(): void {
-    
+
         for (const gameObject of this.gameObjects) {
-            
+
             const children = gameObject.transform.children;
 
             for (const child of children) {
-                child.worldPosition = gameObject.transform.worldPosition.add(gameObject.transform.worldScale.scale(child.position.rotate(gameObject.transform.worldRotation)) as Vector2);
+                
+                child.worldPosition = gameObject.transform.worldPosition.add(
+                    gameObject.transform.worldScale.scale(
+                        child.position.rotate(
+                            gameObject.transform.worldRotation
+                        )
+                    ) as Vector2
+                );
+
                 child.worldRotation = gameObject.transform.worldRotation + child.rotation;
                 child.worldScale = gameObject.transform.worldScale.scale(child.scale) as Scale;
             }
 
-            if(!gameObject.transform.parent){
+            if (!gameObject.transform.parent) {
                 gameObject.transform.worldPosition = gameObject.transform.position;
                 gameObject.transform.worldRotation = gameObject.transform.rotation;
                 gameObject.transform.worldScale = gameObject.transform.scale;
@@ -131,11 +139,11 @@ export default class Scene {
         }
     }
 
-    private _sortZIndex():void{
+    private _sortZIndex(): void {
         this.gameObjects.sort((a, b) => {
             const aZIndex = a.zIndex;
             const bZIndex = b.zIndex;
-            return  aZIndex - bZIndex ;
+            return aZIndex - bZIndex;
         });
     }
 
