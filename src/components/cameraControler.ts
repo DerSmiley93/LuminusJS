@@ -28,10 +28,10 @@ export class CameraController implements Component{
 
         //this.camera!.zoom = Math.sin(this.timeElapsed) * 0.5 + 1;
 
-        this.transform.position.x = Math.sin(this.timeElapsed) * 0.3 * Metric.METER;
+        //this.transform.position.x = Math.sin(this.timeElapsed) * 0.3 * Metric.METER;
        //this.transform.position.y = Math.cos(this.timeElapsed) * 0.3 * Metric.METER;
         
-        this.transform.rotation += 0.01;
+        //this.transform.rotation += 0.01;
         
     }
     

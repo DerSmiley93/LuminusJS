@@ -37,6 +37,7 @@ export class AssetManager{
                 this.loadingProgress = loadedCount / promises.length;
             });
         }
+        
         await Promise.all(promises);
 
         this.isLoaded = true;
