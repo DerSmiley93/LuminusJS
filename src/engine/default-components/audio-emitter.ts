@@ -10,6 +10,7 @@ export class AudioEmitter implements Component {
     private track!: AudioBufferSourceNode
     public audioAsset?: AudioAsset;
 
+    //TODO: needs rework and better code structuring.
     constructor(private options: AudioEmitterOptions) {
 
     }

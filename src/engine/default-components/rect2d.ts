@@ -9,7 +9,7 @@ export class Rect2D implements IShape2D{
     strokeWidth: number;
     strokeColor: string;
     mesh: Vector2[];
-
+    //TODO: create config type for constructor
     constructor(public width: number, public height:number,color:string = 'red', strokeColor:string = 'black', fill:boolean = true, stroke:boolean = false, strokeWidth:number = 1){
         this.color = color;
         this.fill = fill;
