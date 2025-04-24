@@ -2,7 +2,7 @@ import Component from "../engine/core/component.js";
 import GameObject from "../engine/core/game-object.js";
 import game from "../engine/core/game.js";
 import { AudioEmitter } from "../engine/default-components/audio-emitter.js";
-import { Rect2D } from "../engine/default-components/rect2d.js";
+import { Rect2D } from "../engine/types/rect2d.js";
 import ShapeRenderer2D from "../engine/default-components/shape-renderer.js";
 import { Metric } from "../engine/math/metrics.js";
 import Transform from "../engine/math/transform.js";
