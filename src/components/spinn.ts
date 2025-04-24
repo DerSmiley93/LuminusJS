@@ -6,34 +6,46 @@ import { Rect2D } from "../engine/types/rect2d.js";
 import ShapeRenderer2D from "../engine/default-components/shape-renderer.js";
 import { Metric } from "../engine/math/metrics.js";
 import Transform from "../engine/math/transform.js";
+import { QuadTreeNode } from "../engine/math/quad-tree.js";
+import Vector2 from "../engine/math/vector2.js";
 
 
 export default class Spinn implements Component {
     transform!: Transform;
-    testObjectsCount: number = 2000;
-    toggle: boolean = false;
+    quadTree: QuadTreeNode = new QuadTreeNode(1000, 1000, new Vector2(0, 0), 10)
+    testObjects: GameObject[] = [];
 
     start(): void {
-        let audioEmitter = this.transform.gameObject.getComponent(AudioEmitter);
-        if (!AudioEmitter) return;
+        for (let i = 0; i < 500; i++) {
+            const tobj = new GameObject(
+                "testObject:" + i,
+                [
+                    new ShapeRenderer2D(new Rect2D(10, 10, "red", "blue", true, false, 1))
+                ],
+                new Transform(
+                    new Vector2(
+                        Math.random() * this.quadTree.width / 2 - this.quadTree.halfWidth / 2,
+                        Math.random() * this.quadTree.height / 2 - this.quadTree.halfHeigth / 2
+                    )
+                ),
+                1
+            );
 
-        audioEmitter?.playAudio(game.scene!.assetManager.getAsset("testAudio"));
+            tobj.transform.setParent(this.transform);
+            this.testObjects.push(tobj);
+            game.scene?.addGameObject(tobj);
+            this.quadTree.insetObject(tobj);
+        }
     }
 
     update(): void {
+        this.transform.rotation += 1 * game.deltaTime;
+        this.quadTree = new QuadTreeNode(1000,1000,new Vector2(0,0),10);
+        this.testObjects.forEach(obj => {
+            this.quadTree.insetObject(obj);
+        })
 
-        if(this.transform.position.x > Metric.METER && this.toggle){
-            this.toggle = !this.toggle;
-        }
+        this.quadTree.show()
 
-        if(this.transform.position.x < -Metric.METER && !this.toggle){
-            this.toggle = !this.toggle;
-        }
-
-        if (this.toggle) {
-            this.transform.position.x += 10;
-        } else {
-            this.transform.position.x -= 10;
-        }
     }
 }

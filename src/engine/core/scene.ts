@@ -1,4 +1,5 @@
 import Camera from "../default-components/camera.js";
+import Collider2D from "../default-components/collider-2d.js";
 import { AssetManager } from "../external/asset-manager.js";
 import Scale from "../math/scale.js";
 import Vector2 from "../math/vector2.js";
@@ -76,7 +77,31 @@ export default class Scene {
 
         this._updateKinematics();
 
-        // sets position of audio listener to active camera
+        this.setAudioListenerPosition();
+
+
+        if (this.lasGameObjectCount !== this.gameObjects.length) {
+            this._sortZIndex();
+            this.lasGameObjectCount = this.gameObjects.length;
+        }
+
+        for (const gameObject of this.gameObjects) {
+            if(gameObject.hasComponent(Collider2D)){
+
+            }
+
+            gameObject.update();
+        }
+
+    }
+
+    addGameObject(gameObject: GameObject): void {
+        this.gameObjects.push(gameObject);
+        gameObject.start();
+        this._updateKinematics();
+    }
+
+    private setAudioListenerPosition(){
         if (!this.activeCamera) throw new Error("no active camera");
         const audioListener = game.audioContext.listener;
         audioListener.positionX.value = this.activeCamera.transform.worldPosition.x;
@@ -90,24 +115,6 @@ export default class Scene {
         audioListener.upX.value = this.activeCamera.transform.up.x;
         audioListener.upY.value = this.activeCamera.transform.up.y;
         audioListener.upZ.value = 0;
-
-
-        if (this.lasGameObjectCount !== this.gameObjects.length) {
-            this._sortZIndex();
-            this.lasGameObjectCount = this.gameObjects.length;
-        }
-
-        for (const gameObject of this.gameObjects) {
-            gameObject.update();
-        }
-
-    }
-
-
-    addGameObject(gameObject: GameObject): void {
-        this.gameObjects.push(gameObject);
-        gameObject.start();
-        this._updateKinematics();
     }
 
     private _updateKinematics(): void {

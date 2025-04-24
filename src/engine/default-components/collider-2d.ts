@@ -5,10 +5,11 @@ import IColliderShape2D from "../types/collider-shape-2d.js";
 
 export default class Collider2D implements Component{
     transform!: Transform;
-
-    constructor(public colliderShape:IColliderShape2D){
+    
+    constructor(public colliderShape:IColliderShape2D,public isTrigger:boolean){
 
     }
+    
     start(): void {
 
     }
