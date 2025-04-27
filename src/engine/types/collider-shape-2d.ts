@@ -9,7 +9,9 @@ export default interface IColliderShape2D{
 
     projectShape(axis: Vector2): {min:number, max:number};
 
-    getBoundingBox(): IPoint2D[];
+    getBoundingBox(): {halfWidth:number,halfHeight:number,verts:IPoint2D[]};
 
     getNormals(): Vector2[];
+
+    debugDraw(ctx:CanvasRenderingContext2D):void;
 }

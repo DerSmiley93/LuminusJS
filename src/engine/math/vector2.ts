@@ -34,7 +34,7 @@ export default class Vector2 implements IPoint2D {
     }
 
     length(): number{
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.sqrt((this.x * this.x) + (this.y * this.y));
     }
 
     rotate(angle: number): Vector2{

@@ -1,9 +1,9 @@
 export enum Metric{
     PIXEL = 1,
-    MILIMETER = 1,
-    CENTIMETER = 10,
-    DECIMETER = 100,
-    METER = 1000,
+    MILIMETER = 0.1,
+    CENTIMETER = 1,
+    DECIMETER = 10,
+    METER = 100,
     KILOMETER = 100000,
     
     DEGREE = Math.PI / 180,

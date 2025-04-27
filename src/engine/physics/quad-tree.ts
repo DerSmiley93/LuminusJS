@@ -1,108 +1,108 @@
 import game from "../core/game.js";
-import GameObject from "../core/game-object.js";
+import collider from "../core/game-object.js";
 import Vector2 from "../math/vector2.js";
+import Collider2D from "../default-components/collider-2d.js";
 
 export class QuadTree {
-
-}
-
-export class QuadTreeNode {
 
     public halfWidth: number;
     public halfHeigth: number;
 
-    private childNodes: QuadTreeNode[] = [];
-    private objects: GameObject[] = [];
+    private childNodes: QuadTree[] = [];
+    private colliders: Collider2D[] = [];
 
     constructor(public width: number, public height: number, public position: Vector2, private maxNumberOfObjects: number) {
         this.halfWidth = width / 2;
         this.halfHeigth = height / 2;
     }
 
-    insetObject(gameObject: GameObject) {
-        if (this.childNodes.length == 0) {
-            if (this.objects.length + 1 > this.maxNumberOfObjects) {
+    insetObject(collider: Collider2D) {
 
-                this.objects.push(gameObject);
+        if (this.childNodes.length == 0) {
+            if (this.colliders.length + 1 > this.maxNumberOfObjects) {
+                this.colliders.push(collider);
                 this.split();
             } else {
-                this.objects.push(gameObject);
+                this.colliders.push(collider);
             }
 
         } else {
-            const nodeInCharge = this.getNodeInCharge(gameObject);
-            nodeInCharge.insetObject(gameObject);
+            const nodeInCharge = this.getNodeInCharge(collider);
+            nodeInCharge.insetObject(collider);
         }
         return;
     }
 
-    getNodeInCharge(gameObject: GameObject) {
+    getNodeInCharge(collider: Collider2D) {
 
-        const relativePosition = gameObject.transform.worldPosition.subtract(this.position);
+        const relativePosition = collider.transform.worldPosition.subtract(this.position);
 
         if (
             relativePosition.x < 0 &&
             relativePosition.y < 0 &&
-            relativePosition.x > -this.halfWidth &&
-            relativePosition.y > -this.halfHeigth
+            relativePosition.x >= -this.halfWidth &&
+            relativePosition.y >= -this.halfHeigth
         ) {
             
             return this.childNodes[0]
         } else if (
             relativePosition.x < 0 &&
             relativePosition.y > 0 &&
-            relativePosition.x > -this.halfWidth &&
-            relativePosition.y < this.halfHeigth
+            relativePosition.x >= -this.halfWidth &&
+            relativePosition.y <= this.halfHeigth
         ) {
             
             return this.childNodes[1]
         } else if (
             relativePosition.x > 0 &&
             relativePosition.y > 0 &&
-            relativePosition.x < this.halfWidth &&
-            relativePosition.y < this.halfHeigth
+            relativePosition.x <= this.halfWidth &&
+            relativePosition.y <= this.halfHeigth
         ) {
             
             return this.childNodes[2]
         } else if (
             relativePosition.x > 0 &&
             relativePosition.y < 0 &&
-            relativePosition.x < this.halfWidth &&
-            relativePosition.y > -this.halfHeigth
+            relativePosition.x <= this.halfWidth &&
+            relativePosition.y >= -this.halfHeigth
         ) {
             
             return this.childNodes[3]
         } else if (relativePosition.x == 0 && relativePosition.y == 0) {
-            return this.childNodes[Math.floor(Math.random() * this.childNodes.length)];
+            return this.childNodes[2];
         }
         else {
-
-            throw new Error("gameObject is out of Bounds: this should not happen");
+            throw new Error("collider is out of Bounds: this should not happen");
         }
 
     }
 
+    query(){
+        
+    }
+
     split() {
         this.childNodes = [
-            new QuadTreeNode(
+            new QuadTree(
                 this.halfWidth,
                 this.halfHeigth,
                 new Vector2(this.position.x - this.halfWidth / 2, this.position.y - this.halfHeigth / 2),
                 this.maxNumberOfObjects
             ),
-            new QuadTreeNode(
+            new QuadTree(
                 this.halfWidth,
                 this.halfHeigth,
                 new Vector2(this.position.x - this.halfWidth / 2, this.position.y + this.halfHeigth / 2),
                 this.maxNumberOfObjects
             ),
-            new QuadTreeNode(
+            new QuadTree(
                 this.halfWidth,
                 this.halfHeigth,
                 new Vector2(this.position.x + this.halfWidth / 2, this.position.y + this.halfHeigth / 2),
                 this.maxNumberOfObjects
             ),
-            new QuadTreeNode(
+            new QuadTree(
                 this.halfWidth,
                 this.halfHeigth,
                 new Vector2(this.position.x + this.halfWidth / 2, this.position.y - this.halfHeigth / 2),
@@ -111,11 +111,11 @@ export class QuadTreeNode {
 
         ]
 
-        for (const object of this.objects) {
+        for (const object of this.colliders) {
             const nodeInCharge = this.getNodeInCharge(object);
             nodeInCharge.insetObject(object);
         }
-        this.objects = [];
+        this.colliders = [];
     }
 
     show() {

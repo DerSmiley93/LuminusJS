@@ -3,6 +3,7 @@ import Collider2D from "../default-components/collider-2d.js";
 import { AssetManager } from "../external/asset-manager.js";
 import Scale from "../math/scale.js";
 import Vector2 from "../math/vector2.js";
+import PhysicsSolver from "../physics/physics-solver.js";
 import Component from "./component.js";
 import GameObject from "./game-object.js";
 import game from "./game.js";
@@ -15,6 +16,8 @@ export default class Scene {
 
     gameObjects: GameObject[];
     activeCamera?: GameObject
+
+    physicsSolver:PhysicsSolver = new PhysicsSolver(true);
 
     private lasGameObjectCount: number = 0;
 
@@ -93,6 +96,7 @@ export default class Scene {
             gameObject.update();
         }
 
+        this.physicsSolver.update(this.gameObjects);
     }
 
     addGameObject(gameObject: GameObject): void {

@@ -1,5 +1,6 @@
 import game from './engine/core/game.js';
-import testScene from './testScene.js';
+import { CollisionTestScene } from './scenes/collision-test-scene.js';
+
 
 
 const viewportHeight = document.body.clientHeight;
@@ -23,5 +24,6 @@ startGameBtn.onclick = () => {
     game.enableProfiler = true;
 
     game.ctx.imageSmoothingEnabled = false;
-    game.loadScene(testScene, true);
+    game.loadScene(CollisionTestScene,true);
+    
 }
