@@ -48,7 +48,7 @@ export default class ShapeRenderer2D implements Component {
 
         ctx.closePath();
 
-        //TODO: ctx.fillStyle = this.shape.color.toString();
+        //TODO: create Color Object with a toString Method for the Shape
 
         if(this.shape.fill){
             ctx.fillStyle = this.shape.color;

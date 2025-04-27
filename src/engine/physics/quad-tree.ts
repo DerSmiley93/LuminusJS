@@ -1,6 +1,6 @@
 import game from "../core/game.js";
 import GameObject from "../core/game-object.js";
-import Vector2 from "./vector2.js";
+import Vector2 from "../math/vector2.js";
 
 export class QuadTree {
 

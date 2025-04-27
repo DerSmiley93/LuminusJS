@@ -100,7 +100,7 @@ export default class Scene {
         gameObject.start();
         this._updateKinematics();
     }
-
+    //TODO: Implement own Audio Listener the Audio API listener is getting slow over time
     private setAudioListenerPosition(){
         if (!this.activeCamera) throw new Error("no active camera");
         const audioListener = game.audioContext.listener;
