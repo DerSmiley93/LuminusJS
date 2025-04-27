@@ -17,7 +17,7 @@ export default class Scene {
     gameObjects: GameObject[];
     activeCamera?: GameObject
 
-    physicsSolver:PhysicsSolver = new PhysicsSolver(true);
+    physicsSolver:PhysicsSolver = new PhysicsSolver(true,10);
 
     private lasGameObjectCount: number = 0;
 
@@ -104,6 +104,7 @@ export default class Scene {
         gameObject.start();
         this._updateKinematics();
     }
+    
     //TODO: Implement own Audio Listener the Audio API listener is getting slow over time
     private setAudioListenerPosition(){
         if (!this.activeCamera) throw new Error("no active camera");

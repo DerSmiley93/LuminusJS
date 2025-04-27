@@ -6,12 +6,17 @@ import { QuadTree } from "./quad-tree.js";
 
 export default class PhysicsSolver{
     qt?:QuadTree
-    constructor(public debugDraw:boolean){
+    constructor(public debugDraw:boolean,private qtNodeMaxObjects:number){
 
     }
 
     update(gameObjects:GameObject[]){
-        
+        const colliders = this.buildQuadTree(gameObjects);
+        this.checkCollision(colliders);
+    }
+
+
+    buildQuadTree(gameObjects:GameObject[]):Collider2D[]{
         let qtSize = 0;
 
         const colliders:Collider2D[] = []
@@ -22,7 +27,10 @@ export default class PhysicsSolver{
             const collider = gameObjects[i].getComponent(Collider2D);
             if(!collider) throw new Error("No Collider this should not happen");
 
-            const colliderDistance = collider?.colliderShape.transform.worldPosition.length()
+            const colliderDistance = Math.max(
+                Math.sqrt(Math.pow(collider.colliderShape.transform.worldPosition.x,2)),
+                Math.sqrt(Math.pow(collider.colliderShape.transform.worldPosition.y,2))
+            );
 
             if(colliderDistance > qtSize){
                 qtSize = colliderDistance;
@@ -34,18 +42,23 @@ export default class PhysicsSolver{
             qtSize = game.ctx.canvas.width;
         }
 
-        this.qt = new QuadTree(qtSize*2,qtSize*2,Vector2.zero(),2);
+        this.qt = new QuadTree(qtSize*2,qtSize*2,Vector2.zero(),this.qtNodeMaxObjects);
+
         colliders.forEach(collider => {
-            this.qt?.insetObject(collider);
+            this.qt?.insertObject(collider);
         })
 
         if(this.debugDraw) this.qt.show();
 
-        
-
+        return colliders;
     }
 
-    private checkCollision(Collider:Collider2D[]){
+    private checkCollision(colliders:Collider2D[]){
+        if(!this.qt) return false;
 
+        colliders.forEach( collider => {
+            const others = this.qt?.query(collider);
+            
+        })
     }
 }

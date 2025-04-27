@@ -21,7 +21,7 @@ export const CollisionTestScene = new Scene([
                 true
             )
         ],
-        new Transform(new Vector2(100,100)),
+        new Transform(new Vector2(300,300)),
         1
     ),
     new GameObject("MainCamera", [new Camera], new Transform(), 1)

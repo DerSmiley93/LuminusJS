@@ -53,10 +53,14 @@ export default class CircleColliderShape2D implements IColliderShape2D {
             bounds.halfHeight * 2
         )
 
-        ctx.beginPath();
-        ctx.arc(this.transform.worldPosition.x,this.transform.worldPosition.y,this.radius * 2,0,Metric.DEGREE * 360);
+       
+        
         ctx.strokeStyle = "gray";
-        ctx.stroke();
+        ctx.strokeRect(
+            this.transform.worldPosition.x - bounds.halfWidth * 2,
+            this.transform.worldPosition.y - bounds.halfHeight * 2,
+            bounds.halfWidth * 4, 
+            bounds.halfHeight * 4)
 
         ctx.restore();
 

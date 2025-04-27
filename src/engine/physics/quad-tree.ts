@@ -16,7 +16,7 @@ export class QuadTree {
         this.halfHeigth = height / 2;
     }
 
-    insetObject(collider: Collider2D) {
+    insertObject(collider: Collider2D) {
 
         if (this.childNodes.length == 0) {
             if (this.colliders.length + 1 > this.maxNumberOfObjects) {
@@ -28,7 +28,7 @@ export class QuadTree {
 
         } else {
             const nodeInCharge = this.getNodeInCharge(collider);
-            nodeInCharge.insetObject(collider);
+            nodeInCharge.insertObject(collider);
         }
         return;
     }
@@ -43,7 +43,7 @@ export class QuadTree {
             relativePosition.x >= -this.halfWidth &&
             relativePosition.y >= -this.halfHeigth
         ) {
-            
+
             return this.childNodes[0]
         } else if (
             relativePosition.x < 0 &&
@@ -51,7 +51,7 @@ export class QuadTree {
             relativePosition.x >= -this.halfWidth &&
             relativePosition.y <= this.halfHeigth
         ) {
-            
+
             return this.childNodes[1]
         } else if (
             relativePosition.x > 0 &&
@@ -59,7 +59,7 @@ export class QuadTree {
             relativePosition.x <= this.halfWidth &&
             relativePosition.y <= this.halfHeigth
         ) {
-            
+
             return this.childNodes[2]
         } else if (
             relativePosition.x > 0 &&
@@ -67,7 +67,7 @@ export class QuadTree {
             relativePosition.x <= this.halfWidth &&
             relativePosition.y >= -this.halfHeigth
         ) {
-            
+
             return this.childNodes[3]
         } else if (relativePosition.x == 0 && relativePosition.y == 0) {
             return this.childNodes[2];
@@ -78,8 +78,42 @@ export class QuadTree {
 
     }
 
-    query(){
-        
+    query(collider: Collider2D): Collider2D[] {
+
+        let result: Collider2D[] = [];
+
+        const boundingBox = collider.colliderShape.getBoundingBox()
+
+        const isIntersecting = this.intersects(
+            boundingBox.halfWidth * 4,
+            boundingBox.halfHeight * 4,
+            collider.transform.worldPosition
+        )
+
+        if (isIntersecting && this.childNodes.length > 0) {
+            this.childNodes.forEach(node => {
+                
+                result = result.concat(node.query(collider));
+                
+            });
+        } else if (isIntersecting) {
+            result = result.concat(this.colliders);
+        }
+        return result;
+    }
+
+    private intersects(width: number, height: number, boundingPosition: Vector2): boolean {
+
+        if (
+            boundingPosition.x - width / 2 < this.position.x + this.halfWidth &&
+            boundingPosition.x + width / 2 > this.position.x - this.halfWidth &&
+            boundingPosition.y - height / 2 < this.position.y + this.halfHeigth &&
+            boundingPosition.y + height / 2 > this.position.y - this.halfHeigth
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     split() {
@@ -113,7 +147,7 @@ export class QuadTree {
 
         for (const object of this.colliders) {
             const nodeInCharge = this.getNodeInCharge(object);
-            nodeInCharge.insetObject(object);
+            nodeInCharge.insertObject(object);
         }
         this.colliders = [];
     }
