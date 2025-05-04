@@ -35,7 +35,7 @@ export class QuadTree {
 
     getNodeInCharge(collider: Collider2D) {
 
-        const relativePosition = collider.transform.worldPosition.subtract(this.position);
+        const relativePosition = collider.colliderShape.transform.worldPosition.subtract(this.position);
 
         if (
             relativePosition.x < 0 &&
@@ -87,7 +87,7 @@ export class QuadTree {
         const isIntersecting = this.intersects(
             boundingBox.halfWidth * 4,
             boundingBox.halfHeight * 4,
-            collider.transform.worldPosition
+            collider.colliderShape.transform.worldPosition
         )
 
         if (isIntersecting && this.childNodes.length > 0) {
