@@ -14,7 +14,6 @@ export const CollisionTestObject2 = new GameObject("CollisionTestObject2",[
             new Transform()
         ),
         false,
-        true,
         true
     )
 ],new Transform(new Vector2(-200,-200)),1)

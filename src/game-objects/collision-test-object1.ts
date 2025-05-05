@@ -17,5 +17,6 @@ export const CollisionTestObject1 = new GameObject("CollisionTestObject1",[
         ),
         false,
         true,
-    )
+    ),
+    new ShapeRenderer2D(new Rect2D(1*Metric.METER,1*Metric.METER,"red","blue",true,false,1))
 ],new Transform(),1)

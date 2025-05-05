@@ -76,7 +76,7 @@ export default class Scene {
     }
 
     update(): void {
-
+        
 
         this._updateKinematics();
 
@@ -88,15 +88,16 @@ export default class Scene {
             this.lasGameObjectCount = this.gameObjects.length;
         }
 
+        let colliderObjects:GameObject[] = []
 
         for (const gameObject of this.gameObjects) {
             if(gameObject.hasComponent(Collider2D)){
-
+                colliderObjects.push(gameObject)
             }
 
             gameObject.update();
         }
-        this.physicsSolver.update(this.gameObjects);
+        this.physicsSolver.update(colliderObjects);
     }
 
     addGameObject(gameObject: GameObject): void {

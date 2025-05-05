@@ -17,7 +17,7 @@ export const CollisionTestScene = new Scene([
         [
             new Collider2D(
                 new CircleColliderShape2D(1 * Metric.METER, new Transform()),
-                true,
+                false,
                 true
             )
         ],

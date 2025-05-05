@@ -15,7 +15,7 @@ export default class Collider2D implements Component{
     }
     
     start(): void {
-
+        console.log(this)
     }
 
     update(): void {
@@ -36,10 +36,9 @@ export default class Collider2D implements Component{
 
     public collide(collisionInfo:CollisionInfo){
 
-        if(!this.isTrigger && !this.fixed){
+        if(!this.isTrigger && !this.fixed && !collisionInfo.collisions[0].other.isTrigger){
             this.transform.position = this.transform.position.add(collisionInfo.collisions[0].seperationVector)
         }
-            
         this.collisionEventHandlers.forEach(handler => {
             handler(collisionInfo);
         })
