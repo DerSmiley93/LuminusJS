@@ -13,6 +13,7 @@ export const CollisionTestObject2 = new GameObject("CollisionTestObject2",[
             2 * Metric.METER / 2,
             new Transform()
         ),
+        false,
         true,
         true
     )

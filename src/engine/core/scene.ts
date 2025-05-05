@@ -82,11 +82,12 @@ export default class Scene {
 
         this.setAudioListenerPosition();
 
-
+        
         if (this.lasGameObjectCount !== this.gameObjects.length) {
             this._sortZIndex();
             this.lasGameObjectCount = this.gameObjects.length;
         }
+
 
         for (const gameObject of this.gameObjects) {
             if(gameObject.hasComponent(Collider2D)){
@@ -95,7 +96,6 @@ export default class Scene {
 
             gameObject.update();
         }
-
         this.physicsSolver.update(this.gameObjects);
     }
 

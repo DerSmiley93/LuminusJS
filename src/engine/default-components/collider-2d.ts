@@ -8,9 +8,9 @@ import CollisionInfo from "../types/collision-info.js";
 export default class Collider2D implements Component{
     transform!: Transform;
     
-    collisionEventHandlers:Function[] = []
+    collisionEventHandlers:((collisionInfo:CollisionInfo)=>void)[] = []
 
-    constructor(public colliderShape:IColliderShape2D,public isTrigger:boolean,public debugDraw?:boolean){
+    constructor(public colliderShape:IColliderShape2D,public isTrigger:boolean,public debugDraw:boolean = false,public fixed = false){
 
     }
     
@@ -30,13 +30,18 @@ export default class Collider2D implements Component{
         this.colliderShape.transform.updateDirections();
     }
 
-    public onCollide(handler:()=>{}){
+    public onCollide(handler:(collisionInfo:CollisionInfo) => void){
         this.collisionEventHandlers.push(handler);
     }
 
     public collide(collisionInfo:CollisionInfo){
+
+        if(!this.isTrigger && !this.fixed){
+            this.transform.position = this.transform.position.add(collisionInfo.collisions[0].seperationVector)
+        }
+            
         this.collisionEventHandlers.forEach(handler => {
-            handler();
+            handler(collisionInfo);
         })
     }
 

@@ -14,7 +14,6 @@ export class SpriteRenderer implements Component {
     spriteName: string;
     sprite?: Sprite;
 
-    //TODO: maybe refactor or rewrite. for now its working
     constructor(spriteName: string) {
         this.spriteName = spriteName;
     }

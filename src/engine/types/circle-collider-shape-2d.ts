@@ -14,9 +14,9 @@ export default class CircleColliderShape2D implements IColliderShape2D {
     }
 
     projectShape(axis: Vector2): { min: number; max: number; } {
-        const min = axis.dot(this.transform.worldPosition) - this.radius;
-        const max = axis.dot(this.transform.worldPosition) + this.radius;
-
+        const min = this.transform.worldPosition.dot(axis) - this.radius;
+        const max = this.transform.worldPosition.dot(axis) + this.radius;
+        
         return { min, max };
     }
 

@@ -57,39 +57,87 @@ export default class PhysicsSolver {
 
     private solveCollisions(colliders: Collider2D[]) {
 
+
+
         colliders.forEach(collider => {
+            let collisionInfo: CollisionInfo = { collisions: [] }
             const others = this.qt.query(collider);
 
-            const collisions: CollisionInfo[] = [];
-
-
             for (let i = 0; i < others.length; i++) {
-                const other = others[i];
-
-                if (other === collider) continue;
-
-                if (this.aabb(collider, other)) {
-                    
-                    const collision = this.sat(collider, other);
-
+                if (others[i] === collider) continue;
+                if (this.aabb(collider, others[i])) {
+                    const collision = this.sat(collider, others[i]);
                     if (!collision) continue;
-                    if (this.checkDuplicateCollision(collisions, collision)) continue;
 
-                    collisions.push(collision);
+                    collisionInfo.collisions.push(collision);
                 }
             }
 
+            if (collisionInfo.collisions.length > 0) {
+                collider.collide(collisionInfo);
+            }
         });
 
+
+
     }
 
 
-    private checkDuplicateCollision(collisions: CollisionInfo[], collision: CollisionInfo): boolean {
-        throw new Error("not Implemented");
-    }
+    private sat(a: Collider2D, b: Collider2D): { other: Collider2D, seperationVector: Vector2 } | undefined {
+        let aNormals = a.colliderShape.getNormals();
+        let bNormals = b.colliderShape.getNormals();
 
-    private sat(a: Collider2D, b: Collider2D): CollisionInfo | undefined{
-        throw new Error("not Implemented");
+        const aToB = b.colliderShape.transform.worldPosition.subtract(
+            a.colliderShape.transform.worldPosition
+        ).normalize();
+
+        let seperationVector: Vector2 = Vector2.zero();
+        let minSeperation = 0;
+
+        let aProj = a.colliderShape.projectShape(aToB);
+        let bProj = b.colliderShape.projectShape(aToB);
+
+        if (aProj.max > bProj.min && aProj.min < bProj.max) {
+
+            minSeperation = Math.min(Math.abs(aProj.max - bProj.min), Math.abs(aProj.min - bProj.max))
+            seperationVector = aToB.normalize().multiply(-minSeperation / 2);
+
+        } else {
+            return undefined;
+        }
+
+        for (let i = 0; i < aNormals.length; i++) {
+
+            aProj = a.colliderShape.projectShape(aNormals[i]);
+            bProj = b.colliderShape.projectShape(aNormals[i]);
+
+            if (aProj.max > bProj.min && aProj.min < bProj.max) {
+                minSeperation = Math.min(Math.abs(aProj.max - bProj.min), Math.abs(aProj.min - bProj.max))
+                seperationVector = aNormals[i].multiply(-minSeperation);
+            } else {
+                return undefined;
+            }
+
+        }
+
+        for (let i = 0; i < bNormals.length; i++) {
+            aProj = a.colliderShape.projectShape(bNormals[i]);
+            bProj = b.colliderShape.projectShape(bNormals[i]);
+
+            if (aProj.max > bProj.min && aProj.min < bProj.max) {
+                minSeperation = Math.min(Math.abs(aProj.max - bProj.min), Math.abs(aProj.min - bProj.max))
+                seperationVector = bNormals[i].multiply(minSeperation);
+            } else {
+                return undefined;
+            }
+
+        }
+
+        return {
+            other: b,
+            seperationVector
+        }
+
     }
 
     private aabb(a: Collider2D, b: Collider2D): boolean {
@@ -99,16 +147,14 @@ export default class PhysicsSolver {
         const aBounds = a.colliderShape.getBoundingBox();
         const bBounds = b.colliderShape.getBoundingBox();
 
-        if(
+        if (
             aTransform.worldPosition.x + aBounds.halfWidth > bTransform.worldPosition.x - bBounds.halfWidth &&
             aTransform.worldPosition.x - aBounds.halfWidth < bTransform.worldPosition.x + bBounds.halfWidth &&
             aTransform.worldPosition.y + aBounds.halfHeight > bTransform.worldPosition.y - bBounds.halfHeight &&
-            aTransform.worldPosition.y - aBounds.halfHeight < bTransform.worldPosition.y + bBounds.halfHeight 
-
-        ){
+            aTransform.worldPosition.y - aBounds.halfHeight < bTransform.worldPosition.y + bBounds.halfHeight
+        ) {
             return true;
         }
-        
 
         return false;
     }

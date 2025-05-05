@@ -9,13 +9,13 @@ import CircleColliderShape2D from "../engine/types/circle-collider-shape-2d.js";
 import { Rect2D } from "../engine/types/rect2d.js";
 
 export const CollisionTestObject1 = new GameObject("CollisionTestObject1",[
+    new PlayerControler(),
     new Collider2D(
         new CircleColliderShape2D(
             1 * Metric.METER / 2,
             new Transform()
         ),
+        false,
         true,
-        true
-    ),
-    new PlayerControler()
+    )
 ],new Transform(),1)
