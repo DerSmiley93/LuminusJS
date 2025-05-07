@@ -3,19 +3,27 @@ import Transform from "../math/transform.js";
 
 export default class GameObject {
     name: string; // Name of the game object
-    components: Component[]; // List of attached components
+    components: Component[] = []; // List of attached components
+    renderComponents:Component[] = [];
     transform: Transform; // Transform defining position, rotation, and scale
     zIndex: number; // Rendering order
 
     constructor(name: string, components: Component[], transform: Transform, zIndex = 0) {
         this.name = name;
-        this.components = components;
+        
         this.transform = transform;
         this.zIndex = zIndex;
 
         for (const componentA of components) {
             componentA.transform = this.transform;
             
+            
+            if(componentA.isRender){
+                this.renderComponents.push(componentA);
+            }else{
+                this.components.push(componentA);
+            }
+
             //TODO: Remove the duplicate Removal
 
             // Remove duplicate components of the same type
@@ -33,13 +41,21 @@ export default class GameObject {
         for (const component of this.components) {
             component.start(); // Initialize each component
         }
+        for (const component of this.renderComponents){
+            component.start();
+        }
     }
 
     update(): void {
         for (const component of this.components) {
             component.update(); // Update each component
         }
-        
+    }
+
+    render(){
+        for(const component of this.renderComponents){
+            component.update();
+        }
     }
 
     addComponent(component: Component): void {

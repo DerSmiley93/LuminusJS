@@ -24,6 +24,6 @@ startGameBtn.onclick = () => {
     game.enableProfiler = true;
 
     game.ctx.imageSmoothingEnabled = false;
-    game.loadScene(CollisionTestScene,true);
+    game.loadScene(CollisionTestScene,false);
     
 }

@@ -6,13 +6,13 @@ import Vector2 from "../engine/math/vector2.js";
 import CollisionInfo from "../engine/types/collision-info.js";
 
 export class PlayerControler implements Component {
+    isRender: boolean = false;
     transform!: Transform;
 
 
     mousePos: Vector2 = Vector2.zero()
 
     onCollide(collisionInfo: CollisionInfo) {
-
     }
 
     start(): void {
@@ -27,6 +27,6 @@ export class PlayerControler implements Component {
     }
 
     update(): void {
-        this.transform.position = this.mousePos.clone();
+        this.transform.worldPosition = this.mousePos.clone();
     }
 }

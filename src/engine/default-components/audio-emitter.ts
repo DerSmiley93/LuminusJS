@@ -5,6 +5,7 @@ import Transform from "../math/transform.js";
 import { AudioEmitterOptions } from "../types/audio-emitter-options.js";
 
 export class AudioEmitter implements Component {
+    public isRender: boolean = false;
     public transform!: Transform;
     private panner!: PannerNode;
     private track!: AudioBufferSourceNode

@@ -18,10 +18,11 @@ export const CollisionTestScene = new Scene([
             new Collider2D(
                 new CircleColliderShape2D(1 * Metric.METER, new Transform()),
                 false,
+                true,
                 true
             )
         ],
-        new Transform(new Vector2(300,300)),
+        new Transform(new Vector2(10,10)),
         1
     ),
     new GameObject("MainCamera", [new Camera], new Transform(), 1)

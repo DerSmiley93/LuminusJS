@@ -42,8 +42,8 @@ class Game {
         if(this.scene && this.scene.isLoaded){
             this.scene.update();
         }
+        requestAnimationFrame(this.update.bind(this))
         
-        requestAnimationFrame(this.update.bind(this));
     }
 
     async loadScene(scene: Scene, async = false) {
