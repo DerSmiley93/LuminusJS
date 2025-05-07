@@ -1,7 +1,9 @@
 import Camera from "../default-components/camera.js";
+import Collider2D from "../default-components/collider-2d.js";
 import { AssetManager } from "../external/asset-manager.js";
 import Scale from "../math/scale.js";
 import Vector2 from "../math/vector2.js";
+import PhysicsSolver from "../physics/physics-solver.js";
 import Component from "./component.js";
 import GameObject from "./game-object.js";
 import game from "./game.js";
@@ -14,6 +16,8 @@ export default class Scene {
 
     gameObjects: GameObject[];
     activeCamera?: GameObject
+
+    physicsSolver:PhysicsSolver = new PhysicsSolver(true,10);
 
     private lasGameObjectCount: number = 0;
 
@@ -72,11 +76,38 @@ export default class Scene {
     }
 
     update(): void {
-
+        
 
         this._updateKinematics();
 
-        // sets position of audio listener to active camera
+        this.setAudioListenerPosition();
+
+        
+        if (this.lasGameObjectCount !== this.gameObjects.length) {
+            this._sortZIndex();
+            this.lasGameObjectCount = this.gameObjects.length;
+        }
+
+        let colliderObjects:GameObject[] = []
+
+        for (const gameObject of this.gameObjects) {
+            if(gameObject.hasComponent(Collider2D)){
+                colliderObjects.push(gameObject)
+            }
+
+            gameObject.update();
+        }
+        this.physicsSolver.update(colliderObjects);
+    }
+
+    addGameObject(gameObject: GameObject): void {
+        this.gameObjects.push(gameObject);
+        gameObject.start();
+        this._updateKinematics();
+    }
+    
+    //TODO: Implement own Audio Listener the Audio API listener is getting slow over time
+    private setAudioListenerPosition(){
         if (!this.activeCamera) throw new Error("no active camera");
         const audioListener = game.audioContext.listener;
         audioListener.positionX.value = this.activeCamera.transform.worldPosition.x;
@@ -90,24 +121,6 @@ export default class Scene {
         audioListener.upX.value = this.activeCamera.transform.up.x;
         audioListener.upY.value = this.activeCamera.transform.up.y;
         audioListener.upZ.value = 0;
-
-
-        if (this.lasGameObjectCount !== this.gameObjects.length) {
-            this._sortZIndex();
-            this.lasGameObjectCount = this.gameObjects.length;
-        }
-
-        for (const gameObject of this.gameObjects) {
-            gameObject.update();
-        }
-
-    }
-
-
-    addGameObject(gameObject: GameObject): void {
-        this.gameObjects.push(gameObject);
-        gameObject.start();
-        this._updateKinematics();
     }
 
     private _updateKinematics(): void {

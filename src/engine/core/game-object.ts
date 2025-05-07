@@ -15,6 +15,8 @@ export default class GameObject {
 
         for (const componentA of components) {
             componentA.transform = this.transform;
+            
+            //TODO: Remove the duplicate Removal
 
             // Remove duplicate components of the same type
             for (const componentB of components) {
@@ -41,6 +43,9 @@ export default class GameObject {
     }
 
     addComponent(component: Component): void {
+
+        //TODO: Remove the duplicate Removal
+
         // Prevent adding duplicate components of the same type
         for (const existingComponent of this.components) {
             if (existingComponent.constructor === component.constructor) {
@@ -48,6 +53,7 @@ export default class GameObject {
                 return;
             }
         }
+
         this.components.push(component);
         component.transform = this.transform; // Link the new component to the GameObject's transform
     }

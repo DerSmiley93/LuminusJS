@@ -1,7 +1,7 @@
 import Component from "../core/component.js";
 import GameObject from "../core/game-object.js";
 import game from "../core/game.js";
-import  IShape2D  from "../core/shape2d.js";
+import  IShape2D  from "../types/shape2d.js";
 import IPoint2D from "../math/ipoint2d.js";
 import Scale from "../math/scale.js";
 import Transform from "../math/transform.js";
@@ -48,7 +48,7 @@ export default class ShapeRenderer2D implements Component {
 
         ctx.closePath();
 
-        //TODO: ctx.fillStyle = this.shape.color.toString();
+        //TODO: create Color Object with a toString Method for the Shape
 
         if(this.shape.fill){
             ctx.fillStyle = this.shape.color;
