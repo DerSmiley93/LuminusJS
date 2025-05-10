@@ -11,23 +11,11 @@ import Circle2D from "../engine/types/circle2D.js";
 import { Rect2D } from "../engine/types/rect2d.js";
 import { CollisionTestObject1 } from "../game-objects/collision-test-object1.js";
 import { CollisionTestObject2 } from "../game-objects/collision-test-object2.js";
+import { CollisionTestObject3 } from "../game-objects/collision-test-object3.js";
 
 export const CollisionTestScene = new Scene([
     CollisionTestObject1,
     CollisionTestObject2,
-    new GameObject(
-        "collider3",
-        [
-            new Collider2D(
-                new CircleColliderShape2D(1 * Metric.METER, new Transform()),
-                false,
-                false,
-                true
-            ),
-            new ShapeRenderer2D(new Circle2D(1*Metric.METER,"red","blue",true,false,1))
-        ],
-        new Transform(new Vector2(10,10)),
-        1
-    ),
+    CollisionTestObject3,
     new GameObject("MainCamera", [new Camera], new Transform(), 1)
 ])
