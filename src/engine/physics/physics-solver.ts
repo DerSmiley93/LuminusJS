@@ -86,8 +86,6 @@ export default class PhysicsSolver {
         solvedCollisions.push(openCollisions[i]);
       }
 
-      console.log(openCollisions.length);
-
       i++
     }
   }
