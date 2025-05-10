@@ -11,7 +11,7 @@ import Camera from "./camera.js";
 
 
 export default class ShapeRenderer2D implements Component {
-
+    public isRender: boolean = true;
     camera?: Camera;
     transform!: Transform;
     shape:IShape2D;
@@ -25,7 +25,6 @@ export default class ShapeRenderer2D implements Component {
     }
 
     update(): void {
-        
         if(!game.ctx) throw new Error("Canvas not found");
 
         const ctx = game.ctx;

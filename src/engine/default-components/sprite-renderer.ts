@@ -8,7 +8,7 @@ import Vector2 from "../math/vector2.js";
 import { SpriteAtlas } from "../external/sprite-atlas.js";
 
 export class SpriteRenderer implements Component {
-
+    public isRender: boolean = true;
     camera?: Camera;
     transform!: Transform;
     spriteName: string;

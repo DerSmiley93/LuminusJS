@@ -76,10 +76,8 @@ export default class Scene {
     }
 
     update(): void {
-        
-
+    
         this._updateKinematics();
-
         this.setAudioListenerPosition();
 
         
@@ -89,7 +87,7 @@ export default class Scene {
         }
 
         let colliderObjects:GameObject[] = []
-
+        
         for (const gameObject of this.gameObjects) {
             if(gameObject.hasComponent(Collider2D)){
                 colliderObjects.push(gameObject)
@@ -97,7 +95,14 @@ export default class Scene {
 
             gameObject.update();
         }
+
+
         this.physicsSolver.update(colliderObjects);
+        
+
+        for(const gameObject of this.gameObjects){
+            gameObject.render();
+        }
     }
 
     addGameObject(gameObject: GameObject): void {
@@ -143,11 +148,7 @@ export default class Scene {
                 child.worldScale = gameObject.transform.worldScale.scale(child.scale) as Scale;
             }
 
-            if (!gameObject.transform.parent) {
-                gameObject.transform.worldPosition = gameObject.transform.position;
-                gameObject.transform.worldRotation = gameObject.transform.rotation;
-                gameObject.transform.worldScale = gameObject.transform.scale;
-            }
+            
             gameObject.transform.updateDirections();
         }
     }

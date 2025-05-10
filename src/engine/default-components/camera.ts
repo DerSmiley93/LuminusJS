@@ -3,7 +3,7 @@ import GameObject from "../core/game-object.js";
 import Transform from "../math/transform.js";
 
 export default class Camera implements Component{
-
+    public isRender: boolean = false;
     zoom: number;
     transform!: Transform;
 
