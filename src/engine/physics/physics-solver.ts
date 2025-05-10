@@ -85,8 +85,11 @@ export default class PhysicsSolver {
 
         solvedCollisions.push(openCollisions[i]);
       }
-
       i++
+    }
+
+    for(const collision of solvedCollisions){
+      collision.collider.collide(collision.collisionInfo);
     }
   }
 
