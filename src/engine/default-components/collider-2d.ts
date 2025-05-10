@@ -23,7 +23,7 @@ export default class Collider2D implements Component {
         if (this.debugDraw) this.draw();
     }
 
-    private updateColliderKinematics() {
+    public updateColliderKinematics() {
         this.colliderShape.transform.worldPosition = this.colliderShape.transform.position.add(this.transform.worldPosition);
         this.colliderShape.transform.worldRotation = this.colliderShape.transform.rotation + this.transform.worldRotation;
         this.colliderShape.transform.worldScale = this.colliderShape.transform.scale.scale(this.transform.worldScale) as Scale;
@@ -35,18 +35,6 @@ export default class Collider2D implements Component {
     }
 
     public collide(collisionInfo: CollisionInfo) {
-
-        for (let i = 0; i < collisionInfo.collisions.length; i++) {
-            const other = collisionInfo.collisions[i].other
-            if (!this.isTrigger && !this.fixed && !other.isTrigger) {
-                if (other.fixed) {
-                    this.transform.worldPosition = this.transform.worldPosition.add(collisionInfo.collisions[i].seperationVector.multiply(2))
-                } else {
-                    this.transform.worldPosition = this.transform.worldPosition.add(collisionInfo.collisions[i].seperationVector)
-                }
-            }
-        }
-
         this.collisionEventHandlers.forEach(handler => {
             handler(collisionInfo);
         })
