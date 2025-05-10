@@ -5,6 +5,7 @@ import { Metric } from "../engine/math/metrics.js";
 import Transform from "../engine/math/transform.js";
 import Vector2 from "../engine/math/vector2.js";
 import CircleColliderShape2D from "../engine/types/circle-collider-shape-2d.js";
+import Circle2D from "../engine/types/circle2D.js";
 import { Rect2D } from "../engine/types/rect2d.js";
 
 export const CollisionTestObject2 = new GameObject("CollisionTestObject2",[
@@ -14,6 +15,7 @@ export const CollisionTestObject2 = new GameObject("CollisionTestObject2",[
             new Transform()
         ),
         false,
-        true
-    )
+        false
+    ),
+    new ShapeRenderer2D(new Circle2D(1*Metric.METER,"red","blue",true,false,1))
 ],new Transform(new Vector2(-200,-200)),1)

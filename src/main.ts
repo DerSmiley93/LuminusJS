@@ -21,8 +21,6 @@ startGameBtn.onclick = () => {
     document.body.removeChild(startGameBtn);
     game.createCanvas(viewportWidth, viewportHeight);
 
-    game.enableProfiler = true;
-
     game.ctx.imageSmoothingEnabled = false;
     game.loadScene(CollisionTestScene,false);
     

@@ -17,7 +17,7 @@ export default class Scene {
     gameObjects: GameObject[];
     activeCamera?: GameObject
 
-    physicsSolver:PhysicsSolver = new PhysicsSolver(true,10);
+    physicsSolver:PhysicsSolver = new PhysicsSolver(false,10);
 
     private lasGameObjectCount: number = 0;
 
